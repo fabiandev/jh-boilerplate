@@ -1,3 +1,5 @@
+var md5 = require('MD5');
+
 module.exports = function ( grunt ) {
   
   /** 
@@ -12,6 +14,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-coffeelint');
@@ -24,6 +27,9 @@ module.exports = function ( grunt ) {
    */
   var userConfig = require( './build.config.js' );
 
+  var pkg = grunt.file.readJSON("package.json");
+  pkg.version = md5(pkg.version);
+
   /**
    * This is the configuration object Grunt uses to give each plugin its 
    * instructions.
@@ -33,7 +39,7 @@ module.exports = function ( grunt ) {
      * We read in our `package.json` file so we can access the package name and
      * version. It's already there, so we don't repeat ourselves here.
      */
-    pkg: grunt.file.readJSON("package.json"),
+    pkg: pkg,
 
     /**
      * The banner is the comment that is placed at the top of our compiled 
@@ -178,7 +184,8 @@ module.exports = function ( grunt ) {
       build_css: {
         src: [
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/<%= pkg.name %>-less-<%= pkg.version %>.css',
+          '<%= build_dir %>/assets/<%= pkg.name %>-sass-<%= pkg.version %>.css'
         ],
         dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
       },
@@ -261,16 +268,36 @@ module.exports = function ( grunt ) {
     less: {
       build: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.less %>'
+          '<%= build_dir %>/assets/<%= pkg.name %>-less-<%= pkg.version %>.css': '<%= app_files.less %>'
         }
       },
       compile: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.less %>'
+          '<%= build_dir %>/assets/<%= pkg.name %>-less-<%= pkg.version %>.css': '<%= app_files.less %>'
         },
         options: {
           cleancss: true,
           compress: true
+        }
+      }
+    },
+
+    sass: {
+      build: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-sass-<%= pkg.version %>.css': '<%= app_files.sass %>'
+        },
+        options: {
+          sourcemap: 'none'
+        }
+      },
+      compile: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-sass-<%= pkg.version %>.css': '<%= app_files.sass %>'
+        },
+        options: {
+          style: 'compressed',
+          sourcemap: 'none'
         }
       }
     },
@@ -517,6 +544,11 @@ module.exports = function ( grunt ) {
         tasks: [ 'less:build' ]
       },
 
+      sass: {
+        files: [ 'src/**/*.scss' ],
+        tasks: [ 'sass:build' ]
+      },
+
       /**
        * When a JavaScript unit test file changes, we only want to lint it and
        * run the unit tests. We don't want to do any live reloading.
@@ -568,7 +600,7 @@ module.exports = function ( grunt ) {
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
+    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'sass:build', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
     'karma:continuous' 
@@ -579,7 +611,8 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
+    'sass:compile', 'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify',
+    'index:compile'
   ]);
 
   /**

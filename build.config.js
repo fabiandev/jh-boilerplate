@@ -10,6 +10,7 @@ module.exports = {
   build_dir: 'build',
   compile_dir: 'bin',
 
+
   /**
    * This is a collection of file patterns that refer to our app code (the
    * stuff in `src/`). These file paths are used in the configuration of
@@ -30,7 +31,8 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
-    less: 'src/less/main.less'
+    less: 'src/less/main.less',
+    sass: 'src/sass/main.scss'
   },
 
   /**
