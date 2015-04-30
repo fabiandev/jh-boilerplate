@@ -11,7 +11,7 @@ var express = require("express"),
     baseDir = '\\build';
 
 for (var i = 0; i < process.argv.length; i++) {
-  if (i == 2 && process.argv[i] != '-dir') break;
+  if (i == 2 && process.argv[i] != '--dir') break;
   if (i == 3) baseDir = '\\' + process.argv[i];
 }
 
