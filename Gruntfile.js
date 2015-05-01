@@ -589,33 +589,12 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-
-  grunt.registerTask( 'watch', 'Watching for changes.', function(n) {
-    var tasks = [ 'build' ];
-
-    if (grunt.option('with-tests')) {
-      tasks.push( 'test-watch' );
-    }
-
-    tasks.push( 'delta' );
-    grunt.task.run( tasks );
-  });
-
-  grunt.registerTask( 'publish', 'Watching for changes.', function(n) {
-    var tasks = [ 'build' ];
-
-    if (grunt.option('with-tests')) {
-      tasks.push( 'test-publish' );
-    }
-
-    tasks.push( 'compile' );
-    grunt.task.run( tasks );
-  });
+  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
 
   /**
    * The default task is to build and compile.
    */
-  grunt.registerTask( 'default', [ 'publish' ] );
+  grunt.registerTask( 'default', [ 'build', 'compile' ] );
 
   /**
    * The `build` task gets your app ready to run for development and testing.
@@ -623,11 +602,9 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'sass:build', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build'
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
+    'karma:continuous' 
   ]);
-
-  grunt.registerTask( 'test-watch', [ 'karmaconfig', 'karma:continuous', 'karma:unit' ]);
-  grunt.registerTask( 'test-publish', [ 'karmaconfig', 'karma:continuous' ]);
 
   /**
    * The `compile` task gets your app ready for deployment by concatenating and
