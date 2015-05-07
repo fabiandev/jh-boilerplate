@@ -24,6 +24,19 @@ app.use(function(req, res, next) {
   });
 });
 
+app.get('/api/generic', function(res, res, next) {
+  res.json({
+    meta: {
+      type: 'page'
+    },
+    data: {
+      'one': 1,
+      'two': 'bla',
+      'three': true
+    }
+  });
+});
+
 app.get('*', function(req, res, next) {
   if (req.isFile) {
     next();
