@@ -10,9 +10,8 @@
 	function AppController ( $scope, $state, $location, routerHelper, willowNodeService ) {
 
 		$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-
-			if ( angular.isDefined( toState.data.pageTitle ) ) {
-				$scope.pageTitle = toState.data.pageTitle + ' | Watch Club' ;
+			if ( angular.isDefined( toState.data.meta ) ) {
+				$scope.meta = toState.data.meta;
 			}
 			
 		});
@@ -27,6 +26,10 @@
 			activate();
 
 
+			// TODO: generate state like generic.child.grandchild
+			// from /child/grandchild
+			// so nesting is possible
+
 			function activate() {
 				return findWillowNode().then(function() {
 					addStateForNode( aimedState, node );
@@ -39,7 +42,7 @@
 					.then(function( response ) {
 						node = response;
 					})
-					['catch'] (function( error ) {
+					.catch(function( error ) {
 						// handle error
 						console.log(error);
 				});
@@ -47,7 +50,12 @@
 
 		});
 
-		function addStateForNode(aimedState, node) {
+		function addStateForNode( aimedState, node ) {
+			var controller = capitalizeFirstLetter(node.meta.type.toLowerCase()) + 'Controller';
+			var template = node.meta.type.toLowerCase();
+
+			// TODO: use state template
+
 			routerHelper.configureStates([
 				{
 					state: aimedState,
@@ -55,12 +63,13 @@
 						url: aimedState,
 						views: {
 							"main": {
-								controller: 'PageController',
-								templateUrl: 'generic/page/page.tpl.html'
+								controller: controller,
+								templateUrl: 'generic/'+ template +'/'+ template +'.tpl.html'
 							}
 						},
 						data: {
-							pageTitle: 'Test Page'
+							data: node.data,
+							meta: node.meta
 						}
 					}
 				}

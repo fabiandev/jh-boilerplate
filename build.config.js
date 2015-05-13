@@ -64,6 +64,8 @@ module.exports = {
    */
   vendor_files: {
     js: [
+      '/vendor/es5-shim/es5-shim.js',
+      '/vendor/es5-shim/es5-sham.js',
       'vendor/angular/angular.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',

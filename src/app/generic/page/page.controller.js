@@ -10,7 +10,7 @@
 	/* @ngInject */
 	function PageController ( $scope, $location ) {
 
-
+		
 
 	}
 

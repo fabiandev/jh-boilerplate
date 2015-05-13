@@ -27,7 +27,9 @@ app.use(function(req, res, next) {
 app.get('/api/generic', function(res, res, next) {
   res.json({
     meta: {
-      type: 'page'
+      type: 'page',
+      title: 'Custom Page Title',
+      description: 'This is the page description'
     },
     data: {
       'one': 1,

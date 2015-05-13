@@ -8,11 +8,11 @@
 	run.$inject = [ 'routerHelper' ];
 
 	function run( routerHelper ) {
-		routerHelper.configureStates( getStates() );
+		//routerHelper.configureStates( getStates() );
 	}
 
 	function getStates() {
-		return [
+		/*return [
 			{
 				state: 'home',
 				config: {
@@ -24,11 +24,13 @@
 						}
 					},
 					data: {
-						pageTitle: 'Home'
+						meta: {
+							title: 'Home'
+						}
 					}
 				}
 			}
-		];
+		];*/
 	}
 
 })();

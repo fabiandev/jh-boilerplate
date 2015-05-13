@@ -17,7 +17,7 @@ function willowNodeService ( $http ) {
 
 		return $http.get( '/api/generic' )
 			.then( findByUrlComplete )
-			['catch']( findByUrlFailed );
+			.catch( findByUrlFailed );
 
 		function findByUrlComplete( response ) {
 			return response.data;

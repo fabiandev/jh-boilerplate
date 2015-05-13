@@ -5,29 +5,16 @@
 		.module( 'app' )
 		.run( run );
 
-	run.$inject = [ 'routerHelper' ];
+	run.$inject = [ '$rootScope', 'routerHelper' ];
 
-	function run( routerHelper ) {
-		routerHelper.configureStates( getStates() );
+	function run( $rootScope, routerHelper ) {
+
+		routerHelper.configureStates(stateData);
+
+		routerHelper.configureOtherwise(function($injector, $location) {
+			$rootScope.$broadcast('$stateNotFound', { to: $location.path() });
+		});
+
 	}
 
-	function getStates() {
-		return [
-			{
-				state: 'generic',
-				config: {
-					url: '/about',
-					views: {
-						"main": {
-							controller: 'AboutController',
-							templateUrl: 'about/about.tpl.html'
-						}
-					},
-					data: {
-						pageTitle: 'What is It?'
-					}
-				}
-			}
-		];
-	}
 })();
