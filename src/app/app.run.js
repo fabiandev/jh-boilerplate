@@ -9,9 +9,9 @@
 
 	function run( $rootScope, routerHelper ) {
 
-		routerHelper.configureStates(stateData);
+		routerHelper.addStates(__mainConfig.states);
 
-		routerHelper.configureOtherwise(function($injector, $location) {
+		routerHelper.setOtherwise(function($injector, $location) {
 			$rootScope.$broadcast('$stateNotFound', { to: $location.path() });
 		});
 

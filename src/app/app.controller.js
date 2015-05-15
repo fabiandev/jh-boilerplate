@@ -18,9 +18,8 @@
 
 		$scope.$on('$stateNotFound', function(event, toState, toParams, fromState, fromParams) {
 			event.preventDefault();
-
-			var path = $location.path();
-			var aimedState = toState.to;
+			console.log(event);
+			var statePath = toState.to;
 			var node;
 
 			activate();
@@ -32,13 +31,13 @@
 
 			function activate() {
 				return findWillowNode().then(function() {
-					addStateForNode( aimedState, node );
+					addStateForNode( statePath, node );
 					console.log(node);
 				});
 			}
 
 			function findWillowNode() {
-				return willowNodeService.findByPath( path )
+				return willowNodeService.findByPath( statePath )
 					.then(function( response ) {
 						node = response;
 					})
@@ -49,33 +48,41 @@
 			}
 
 		});
+  
+		function addStateForNode( statePath, node ) {
+			var templateId = node.meta.type.toLowerCase();
+			var template;
 
-		function addStateForNode( aimedState, node ) {
-			var controller = capitalizeFirstLetter(node.meta.type.toLowerCase()) + 'Controller';
-			var template = node.meta.type.toLowerCase();
-
-			// TODO: use state template
-
-			routerHelper.configureStates([
-				{
-					state: aimedState,
-					config: {
-						url: aimedState,
-						views: {
-							"main": {
-								controller: controller,
-								templateUrl: 'generic/'+ template +'/'+ template +'.tpl.html'
-							}
-						},
-						data: {
-							data: node.data,
-							meta: node.meta
-						}
-					}
+			for (var i = 0; i < __mainConfig.stateTemplates.length; i++) {
+				if (__mainConfig.stateTemplates[i].type == templateId) {
+					template = clone(__mainConfig.stateTemplates[i].template);
+					break;
 				}
-			]);
+			}
 
-			$state.go(aimedState);
+			if (!template) {
+				// handle page not found
+			}
+
+			// aimedState = makeStateString(aimedState)
+			
+			template.config.data = node;
+			template.config.url = statePath;
+			template.state = statePath;
+
+			routerHelper.addStates([template]);
+
+			//return;
+			// TODO: check if aimedState exists, then broadcast and go
+
+			/*$scope.$broadcast('states:added', {
+				path: stateUrl,
+				state: aimedState
+			});*/
+			
+			console.log('states created', routerHelper.getStates());
+
+			$state.go(statePath);
 		}
 
 		$scope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams) {

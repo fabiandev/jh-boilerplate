@@ -12,6 +12,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-sass');
@@ -28,7 +29,8 @@ module.exports = function ( grunt ) {
   var userConfig = require( './build.config.js' );
 
   var pkg = grunt.file.readJSON("package.json");
-  pkg.version = md5(pkg.version);
+  pkg.version = pkg.version;
+  pkg.versionMD5 = md5(pkg.version);
 
   /**
    * This is the configuration object Grunt uses to give each plugin its 
@@ -53,7 +55,7 @@ module.exports = function ( grunt ) {
         ' * <%= pkg.homepage %>\n' +
         ' *\n' +
         ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-        ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
+        ' * <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
         ' */\n'
     },
 
@@ -158,7 +160,7 @@ module.exports = function ( grunt ) {
       compile_assets: {
         files: [
           {
-            src: [ '**' ],
+            src: [ '**', '!style.less.css', '!style.sass.css', '!style.css' ],
             dest: '<%= compile_dir %>/assets',
             cwd: '<%= build_dir %>/assets',
             expand: true
@@ -184,10 +186,10 @@ module.exports = function ( grunt ) {
       build_css: {
         src: [
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-less-<%= pkg.version %>.css',
-          '<%= build_dir %>/assets/<%= pkg.name %>-sass-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/style.less.css',
+          '<%= build_dir %>/assets/style.sass.css'
         ],
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+        dest: '<%= build_dir %>/assets/style.css'
       },
       /**
        * The `compile_js` target is the concatenation of our application source
@@ -206,7 +208,7 @@ module.exports = function ( grunt ) {
           '<%= html2js.common.dest %>', 
           'module.suffix' 
         ],
-        dest: '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.js'
+        dest: '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.versionMD5 %>.js'
       }
     },
 
@@ -253,10 +255,23 @@ module.exports = function ( grunt ) {
     uglify: {
       compile: {
         options: {
-          banner: '<%= meta.banner %>'
+          banner: '<%= meta.banner %>',
+          compress: true
         },
         files: {
           '<%= concat.compile_js.dest %>': '<%= concat.compile_js.dest %>'
+        }
+      }
+    },
+
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: {
+          '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.versionMD5 %>.css': ['<%= build_dir %>/assets/style.css']
         }
       }
     },
@@ -269,12 +284,12 @@ module.exports = function ( grunt ) {
     less: {
       build: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-less-<%= pkg.version %>.css': '<%= app_files.less %>'
+          '<%= build_dir %>/assets/style.less.css': '<%= app_files.less %>'
         }
       },
       compile: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-less-<%= pkg.version %>.css': '<%= app_files.less %>'
+          '<%= build_dir %>/assets/style.less.css': '<%= app_files.less %>'
         },
         options: {
           cleancss: true,
@@ -286,7 +301,7 @@ module.exports = function ( grunt ) {
     sass: {
       build: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-sass-<%= pkg.version %>.css': '<%= app_files.sass %>'
+          '<%= build_dir %>/assets/style.sass.css': '<%= app_files.sass %>'
         },
         options: {
           sourcemap: 'none'
@@ -294,7 +309,7 @@ module.exports = function ( grunt ) {
       },
       compile: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-sass-<%= pkg.version %>.css': '<%= app_files.sass %>'
+          '<%= build_dir %>/assets/style.sass.css': '<%= app_files.sass %>'
         },
         options: {
           style: 'compressed',
@@ -419,7 +434,7 @@ module.exports = function ( grunt ) {
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/style.css'
         ]
       },
 
@@ -432,8 +447,7 @@ module.exports = function ( grunt ) {
         dir: '<%= compile_dir %>',
         src: [
           '<%= concat.compile_js.dest %>',
-          '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.versionMD5 %>.css'
         ]
       }
     },
@@ -464,6 +478,7 @@ module.exports = function ( grunt ) {
      *
      * But we don't need the same thing to happen for all the files. 
      */
+
     delta: {
       /**
        * By default, we want the Live Reload to work for all tasks; this is
@@ -506,7 +521,7 @@ module.exports = function ( grunt ) {
         files: [ 
           '<%= app_files.coffee %>'
         ],
-        tasks: [ 'coffeelint:src', 'coffee:source', 'karma:unit:run', 'copy:build_appjs' ]
+        tasks: [ 'coffeelint:src', 'coffee:source', 'copy:build_appjs' ]
       },
 
       /**
@@ -560,7 +575,7 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.jsunit %>'
         ],
-        tasks: [ 'jshint:test', 'karma:unit:run' ],
+        tasks: [ 'jshint:test' ],
         options: {
           livereload: false
         }
@@ -574,12 +589,107 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.coffeeunit %>'
         ],
+        tasks: [ 'coffeelint:test' ],
+        options: {
+          livereload: false
+        }
+      }
+
+    },
+
+    deltaWithTests: {
+
+      options: {
+        livereload: true
+      },
+
+      gruntfile: {
+        files: 'Gruntfile.js',
+        tasks: [ 'jshint:gruntfile' ],
+        options: {
+          livereload: false
+        }
+      },
+
+      jssrc: {
+        files: [ 
+          '<%= app_files.js %>'
+        ],
+        tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs' ]
+      },
+
+      coffeesrc: {
+        files: [ 
+          '<%= app_files.coffee %>'
+        ],
+        tasks: [ 'coffeelint:src', 'coffee:source', 'karma:unit:run', 'copy:build_appjs' ]
+      },
+
+      /**
+       * When assets are changed, copy them. Note that this will *not* copy new
+       * files, so this is probably not very useful.
+       */
+      assets: {
+        files: [ 
+          'src/assets/**/*'
+        ],
+        tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets' ]
+      },
+
+      /**
+       * When index.html changes, we need to compile it.
+       */
+      html: {
+        files: [ '<%= app_files.html %>' ],
+        tasks: [ 'index:build' ]
+      },
+
+      /**
+       * When our templates change, we only rewrite the template cache.
+       */
+      tpls: {
+        files: [ 
+          '<%= app_files.atpl %>', 
+          '<%= app_files.ctpl %>'
+        ],
+        tasks: [ 'html2js' ]
+      },
+
+      /**
+       * When the CSS files change, we need to compile and minify them.
+       */
+      less: {
+        files: [ 'src/**/*.less' ],
+        tasks: [ 'less:build' ]
+      },
+
+      sass: {
+        files: [ 'src/**/*.scss' ],
+        tasks: [ 'sass:build' ]
+      },
+
+      jsunit: {
+        files: [
+          '<%= app_files.jsunit %>'
+        ],
+        tasks: [ 'jshint:test', 'karma:unit:run' ],
+        options: {
+          livereload: false
+        }
+      },
+
+      coffeeunit: {
+        files: [
+          '<%= app_files.coffeeunit %>'
+        ],
         tasks: [ 'coffeelint:test', 'karma:unit:run' ],
         options: {
           livereload: false
         }
       }
+
     }
+
   };
 
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
@@ -592,7 +702,20 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
+
+  grunt.registerTask( 'watch', function() {
+    var tasks = [ 'build' ];
+
+    if ( grunt.option('with-tests') ) {
+      grunt.renameTask( 'delta', 'deltaWithTests' );
+      tasks.push('karma:unit');
+      tasks.push('deltaWithTests');
+    } else {
+      tasks.push('delta');
+    }
+
+    grunt.task.run( tasks );
+  });
 
   /**
    * The default task is to build and compile.
@@ -602,19 +725,25 @@ module.exports = function ( grunt ) {
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
-  grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'sass:build', 'less:build',
+  grunt.registerTask( 'build', function() {
+    var tasks = [ 'clean', 'html2js', 'jshint', 'sass:build', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
-    'karma:continuous' 
-  ]);
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build' ];
+
+    if ( grunt.option('with-tests') ) {
+      tasks.push('karmaconfig');
+      tasks.push('karma:continuous');
+    }
+
+    grunt.task.run( tasks );
+  });
 
   /**
    * The `compile` task gets your app ready for deployment by concatenating and
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'sass:compile', 'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify',
+    'sass:compile', 'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'cssmin',
     'index:compile'
   ]);
 

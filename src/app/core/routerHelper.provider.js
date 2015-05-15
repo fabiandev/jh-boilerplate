@@ -20,24 +20,25 @@
 
 			// TODO: fetch defaults from server
 			var defaults = {
-				baseUrl: 'http://example.com',
-				title: 'Title',
-				description: 'Description',
-				image: 'http://example.com/image.jpg',
-				titleSuffix: ' | WatchClub'
+				baseUrl: __mainConfig.config.baseUrl,
+				title: __mainConfig.config.defaultTitle,
+				description: __mainConfig.config.defaultDescription,
+				image: __mainConfig.config.defaultImage,
+				titleSuffix: __mainConfig.config.titleSuffix,
+				titlePrefix: __mainConfig.config.titlePrefix
 			};
 
 			var defaultData = {
 				meta: {
-					title: defaults.title + defaults.titleSuffix,
+					title: defaults.titlePrefix + defaults.title + defaults.titleSuffix,
 					description: defaults.description,
 					image: defaults.image
 				}
 			};
 
 			var service = {
-				configureStates: configureStates,
-				configureOtherwise: configureOtherwise,
+				addStates: addStates,
+				setOtherwise: setOtherwise,
 				getStates: getStates
 			};
 
@@ -45,14 +46,39 @@
 
 			///////////////
 
-			function configureOtherwise( otherwise ) {
+			function setOtherwise( otherwise ) {
 				if (otherwise && !hasOtherwise) {
 					hasOtherwise = true;
 					$urlRouterProvider.otherwise( otherwise );
 				}
 			}
 
-			function configureStates( states, otherwise ) {
+			function addStates( states ) {
+				var allstates = findAllStatesWithNested(states, []);
+				console.log('states to add', states);
+				configureStates(allstates);
+			}
+
+			function findAllStatesWithNested( states, statesCollection ) {
+				for (var i = 0; i < states.length; i++) {
+					statesCollection.push({
+						state: states[i].state,
+						config: states[i].config
+					});
+
+					if ( states[i].children && states[i].children.length ) {
+						for (var j = 0; j < states[i].children.length; j++) {
+							states[i].children[j].state = states[i].state + '.' + states[i].children[j].state;
+						}
+						
+						return findAllStatesWithNested( states[i].children, statesCollection );
+					}
+				}
+
+				return statesCollection;
+			}
+
+			function configureStates( states ) {
 				states.forEach(function( state ) {
 
 					if ( ! state.config.data ) {
@@ -63,7 +89,7 @@
 						if ( ! state.config.data.meta.title ) {
 							state.config.data.meta.title = defaults.title;
 						} else {
-							state.config.data.meta.title += defaults.titleSuffix;
+							state.config.data.meta.title = defaults.titlePrefix + state.config.data.meta.title + defaults.titleSuffix;
 						}
 
 						if ( ! state.config.data.meta.description ) {
@@ -82,11 +108,6 @@
 					$stateProvider.state( state.state, state.config );
 
 				});
-
-				if (otherwise && !hasOtherwise) {
-					hasOtherwise = true;
-					$urlRouterProvider.otherwise( otherwise );
-				}
 			}
 
 			function getStates() {
