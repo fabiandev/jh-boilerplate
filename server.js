@@ -25,6 +25,19 @@ app.use(function(req, res, next) {
 });
 
 app.get('/api/generic', function(res, res, next) {
+
+  /*res.status(404).send({
+    meta: {
+      type: 'error',
+      title: 'Not Found',
+      description: 'You can overwrite the default description and title.',
+      errorCode: 404
+    },
+    data: {
+      'customData': 'may be usefil'
+    }
+  });
+  return;*/
   res.json({
     meta: {
       type: 'page',
@@ -37,6 +50,7 @@ app.get('/api/generic', function(res, res, next) {
       'three': true
     }
   });
+
 });
 
 app.get('*', function(req, res, next) {

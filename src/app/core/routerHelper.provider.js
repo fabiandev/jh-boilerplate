@@ -56,11 +56,13 @@
 			function addStates( states ) {
 				var allstates = findAllStatesWithNested(states, []);
 				console.log('states to add', states);
+				console.log('ALL STATES', allstates);
 				configureStates(allstates);
 			}
 
 			function findAllStatesWithNested( states, statesCollection ) {
 				for (var i = 0; i < states.length; i++) {
+					console.log('now adding', states[i].state);
 					statesCollection.push({
 						state: states[i].state,
 						config: states[i].config
@@ -71,7 +73,7 @@
 							states[i].children[j].state = states[i].state + '.' + states[i].children[j].state;
 						}
 						
-						return findAllStatesWithNested( states[i].children, statesCollection );
+						findAllStatesWithNested( states[i].children, statesCollection );
 					}
 				}
 
