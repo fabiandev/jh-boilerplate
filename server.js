@@ -1,21 +1,47 @@
-var express = require("express"),
-    app = express(),
-    fs = require('fs'),
-    bodyParser = require('body-parser'),
-    errorHandler = require('errorhandler'),
-    methodOverride = require('method-override'),
-    colors = require('colors'),
-    hostname = process.env.HOSTNAME || 'localhost',
+
+/*-----------------------------------------------------------
+ | SETTINGS
+ |-----------------------------------------------------------
+ |
+ | Define your test routes below
+ |
+ */
+
+
+/*
+ * Require npm modules
+ */
+var express = require("express");
+var app = express();
+var fs = require('fs');
+var bodyParser = require('body-parser');
+var errorHandler = require('errorhandler');
+var methodOverride = require('method-override');
+var colors = require('colors');
+
+
+/*
+ * Initialise config variable
+ */
+var hostname = process.env.HOSTNAME || 'localhost',
     port = parseInt(process.env.PORT, 10) || 4567,
     basePath = __dirname,
     baseDir = '/build';
 
+
+/*
+ * Checks if server should listen on a sub directory
+ */
 for (var i = 0; i < process.argv.length; i++) {
   if (i == 2 && process.argv[i] != '--dir') break;
   if (i == 3) baseDir = '/' + process.argv[i];
 }
 
-publicDir = basePath + baseDir;
+
+/*
+ * Set the base path
+ */
+var publicDir = basePath + baseDir;
 
 app.use(function(req, res, next) {
   fs.stat(publicDir + req.url, function(err, stats) {
@@ -24,20 +50,18 @@ app.use(function(req, res, next) {
   });
 });
 
-app.get('/api/generic', function(res, res, next) {
 
-  /*res.status(404).send({
-    meta: {
-      type: 'error',
-      title: 'Not Found',
-      description: 'You can overwrite the default description and title.',
-      errorCode: 404
-    },
-    data: {
-      'customData': 'may be usefil'
-    }
-  });
-  return;*/
+
+/*-----------------------------------------------------------
+ | ROUTES
+ |-----------------------------------------------------------
+ |
+ | Define your test routes below
+ |
+ */
+
+
+app.get('/api/generic', function (res, res, next) {
   res.json({
     meta: {
       type: 'page',
@@ -53,7 +77,22 @@ app.get('/api/generic', function(res, res, next) {
 
 });
 
-app.get('*', function(req, res, next) {
+
+
+/*-----------------------------------------------------------
+ | CONFIGURATION
+ |-----------------------------------------------------------
+ |
+ | Below the server is configured
+ |
+ */
+
+
+/*
+ * Always serve index.html if requested file
+ * could not be found
+ */
+app.get('*', function (req, res, next) {
   if (req.isFile) {
     next();
   } else {
@@ -61,16 +100,28 @@ app.get('*', function(req, res, next) {
   }
 });
 
+
+/*
+ * Register middleware
+ */
 app.use(methodOverride());
+
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
 app.use(express.static(publicDir));
+
 app.use(errorHandler({
   dumpExceptions: true,
   showStack: true
 }));
 
-console.log("server listening on %s at http://%s:%s".cyan, baseDir, hostname, port);
+
+/*
+ * Listen on specified port and directory
+ */
+console.log('server listening on %s at http://%s:%s'.cyan, baseDir, hostname, port);
 app.listen(port, hostname);
