@@ -8,11 +8,11 @@ var express = require("express"),
     hostname = process.env.HOSTNAME || 'localhost',
     port = parseInt(process.env.PORT, 10) || 4567,
     basePath = __dirname,
-    baseDir = '\\build';
+    baseDir = '/build';
 
 for (var i = 0; i < process.argv.length; i++) {
   if (i == 2 && process.argv[i] != '--dir') break;
-  if (i == 3) baseDir = '\\' + process.argv[i];
+  if (i == 3) baseDir = '/' + process.argv[i];
 }
 
 publicDir = basePath + baseDir;
