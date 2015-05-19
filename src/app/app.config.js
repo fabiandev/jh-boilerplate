@@ -4,9 +4,9 @@
 	angular.module( 'app' )
 		.config( config );
 
-	config.$inject = [ 'routerHelperProvider' ];
+	config.$inject = [ 'stateManagerProvider' ];
 
-	function config ( routerHelperProvider ) {
+	function config ( stateManagerProvider ) {
 
 		//$locationProvider.html5Mode( true ).hashPrefix( '!' );
 

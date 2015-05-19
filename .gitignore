@@ -4,5 +4,6 @@ build/
 bin/
 node_modules/
 vendor/
+!vendor/placeholders
 .sass-cache
 .idea

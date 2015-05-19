@@ -22,7 +22,7 @@ __mainConfig.states = [
 			views: {
 				"main": {
 					controller: 'HomeController',
-					templateUrl: 'home/home.tpl.html'
+					templateUrl: 'home/templates/home.tpl.html'
 				}
 			},
 			data: {
@@ -39,7 +39,7 @@ __mainConfig.states = [
 					views: {
 						"test": {
 							controller: 'PageController',
-							templateUrl: 'home/home.test.tpl.html'
+							templateUrl: 'home/templates/home.test.tpl.html'
 						}
 					},
 					data: {
@@ -57,7 +57,7 @@ __mainConfig.states = [
 					views: {
 						"test": {
 							controller: 'PageController',
-							templateUrl: 'home/home.test2.tpl.html'
+							templateUrl: 'home/templates/home.test2.tpl.html'
 						}
 					},
 					data: {
@@ -81,7 +81,7 @@ __mainConfig.stateTemplates = [
 				views: {
 					"main": {
 						controller: 'PageController',
-						templateUrl: 'generic/page/page.tpl.html'
+						templateUrl: 'generic/page/templates/page.tpl.html'
 					}
 				}
 			}
@@ -92,12 +92,30 @@ __mainConfig.stateTemplates = [
 __mainConfig.stateErrorTemplates = [
 
 	{
+		errorCode: 'none',
+		template: {
+			views: {
+				"main": {
+					controller: 'ErrorController',
+					templateUrl: 'generic/error/templates/error.general.tpl.html'
+				}
+			},
+			data: {
+				meta: {
+					title: 'Error',
+					description: 'Whoops, something went wrong.'
+				}
+			}
+		}
+	},
+
+	{
 		errorCode: '400',
 		template: {
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.400.tpl.html'
+					templateUrl: 'generic/error/templates/error.400.tpl.html'
 				}
 			},
 			data: {
@@ -115,7 +133,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.401.tpl.html'
+					templateUrl: 'generic/error/templates/error.401.tpl.html'
 				}
 			},
 			data: {
@@ -133,7 +151,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.404.tpl.html'
+					templateUrl: 'generic/error/templates/error.404.tpl.html'
 				}
 			},
 			data: {
@@ -151,7 +169,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.404.tpl.html'
+					templateUrl: 'generic/error/templates/error.404.tpl.html'
 				}
 			},
 			data: {
@@ -169,7 +187,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.404.tpl.html'
+					templateUrl: 'generic/error/templates/error.404.tpl.html'
 				}
 			},
 			data: {
@@ -187,7 +205,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.404.tpl.html'
+					templateUrl: 'generic/error/templates/error.404.tpl.html'
 				}
 			},
 			data: {
@@ -205,7 +223,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.404.tpl.html'
+					templateUrl: 'generic/error/templates/error.404.tpl.html'
 				}
 			},
 			data: {
@@ -223,7 +241,7 @@ __mainConfig.stateErrorTemplates = [
 			views: {
 				"main": {
 					controller: 'ErrorController',
-					templateUrl: 'generic/error/error.404.tpl.html'
+					templateUrl: 'generic/error/templates/error.404.tpl.html'
 				}
 			},
 			data: {
