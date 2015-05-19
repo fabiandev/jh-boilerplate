@@ -35,7 +35,7 @@ __mainConfig.states = [
 			{
 				state: 'test',
 				config: {
-					url: '/{someId:[0-9]{1,8}}',
+					url: '^/{someId:[0-9]{1,8}}',
 					views: {
 						"test": {
 							controller: 'PageController',

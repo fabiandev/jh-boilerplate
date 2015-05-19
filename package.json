@@ -1,16 +1,18 @@
 {
   "author": "JohnHenry",
   "name": "app",
-  "version": "0.0.59",
+  "version": "0.0.61",
   "homepage": "",
    "licenses": {
     "type": "All rights reserved.",
     "url": "http://www.johnhenry.net"
   },
-  "bugs": "",
+  "bugs": { "url" : "",
+            "email" : ""
+  },
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "https://github.com/fabianweb/jh-boilerplate.git"
   },
   "dependencies": {},
   "devDependencies": {

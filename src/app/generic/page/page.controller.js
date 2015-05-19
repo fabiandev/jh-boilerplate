@@ -1,7 +1,8 @@
 (function() {
 	'use strict';
 
-	angular.module( 'generic.page' )
+	angular
+		.module( 'generic.page' )
 		.controller( 'PageController', PageController );
 
 
