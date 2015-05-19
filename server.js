@@ -21,7 +21,7 @@ var colors = require('colors');
 
 
 /*
- * Initialise config variable
+ * Initialize config variable
  */
 var hostname = process.env.HOSTNAME || 'localhost',
     port = parseInt(process.env.PORT, 10) || 4567,
