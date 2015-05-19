@@ -7,3 +7,5 @@ vendor/
 !vendor/placeholders
 .sass-cache
 .idea
+npm
+npm-debug.log
