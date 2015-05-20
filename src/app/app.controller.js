@@ -5,89 +5,57 @@
 		.controller( 'AppController', AppController );
 
 
-	AppController.$inject = [ '$scope', '$state', '$location', 'routerHelper', 'willowNodeService' ];
+	AppController.$inject = [ '$scope', '$state', '$location', 'stateManager', 'willowNodeService', '$browser', '$log' ];
 
-	function AppController ( $scope, $state, $location, routerHelper, willowNodeService ) {
+	function AppController ( $scope, $state, $location, stateManager, willowNodeService, $browser, $log ) {
 
 		$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 			if ( angular.isDefined( toState.data.meta ) ) {
 				$scope.meta = toState.data.meta;
 			}
-			
 		});
 
 		$scope.$on('$stateNotFound', function(event, toState, toParams, fromState, fromParams) {
+			/*jshint -W027*/
+			//return $state.go('error.404');
 			event.preventDefault();
-			console.log(event);
-			var statePath = toState.to;
+
+			var state = toState.to;
 			var node;
 
-			activate();
+			$log.debug('state '+ state +' not found, looking for a node..');
 
-
-			// TODO: generate state like generic.child.grandchild
-			// from /child/grandchild
-			// so nesting is possible
-
-			function activate() {
-				return findWillowNode().then(function() {
-					addStateForNode( statePath, node );
-					console.log(node);
-				});
-			}
+			findWillowNode();
 
 			function findWillowNode() {
-				return willowNodeService.findByPath( statePath )
-					.then(function( response ) {
-						node = response;
+				return willowNodeService.findByPath( state )
+					.success(function( data ) {
+						$log.debug('node has been found, going to add a state for '+ state);
+						addStateForNode(state, data);
 					})
-					.catch(function( error ) {
-						// handle error
-						console.log(error);
+					.error(function( data, status, headers ) {
+						$log.debug('no node found for path '+ state);
+						addErrorStateForNode(state, data, status);
 				});
 			}
-
 		});
-  
-		function addStateForNode( statePath, node ) {
-			var templateId = node.meta.type.toLowerCase();
-			var template;
 
-			for (var i = 0; i < __mainConfig.stateTemplates.length; i++) {
-				if (__mainConfig.stateTemplates[i].type == templateId) {
-					template = clone(__mainConfig.stateTemplates[i].template);
-					break;
-				}
-			}
+		function addStateForNode( state, node ) {
+			stateManager.addStateForNode( state, node );
+			$state.go(state);
+		}
 
-			if (!template) {
-				// handle page not found
-			}
-
-			// aimedState = makeStateString(aimedState)
-			
-			template.config.data = node;
-			template.config.url = statePath;
-			template.state = statePath;
-
-			routerHelper.addStates([template]);
-
-			//return;
-			// TODO: check if aimedState exists, then broadcast and go
-
-			/*$scope.$broadcast('states:added', {
-				path: stateUrl,
-				state: aimedState
-			});*/
-			
-			console.log('states created', routerHelper.getStates());
-
-			$state.go(statePath);
+		function addErrorStateForNode( state, node, errorCode ) {
+			stateManager.addErrorStateForNode( state, node, errorCode );
+			$state.go(state);
 		}
 
 		$scope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams) {
 			event.preventDefault();
-			// TODO: handle error
+
+			if ( toState.to != 'error' ) {
+				$state.go( 'error' );
+			}
 		});
 
 	}

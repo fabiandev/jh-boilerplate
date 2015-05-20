@@ -5,3 +5,7 @@ function capitalizeFirstLetter(str) {
 function clone (src) {
 	return JSON.parse(JSON.stringify(src));
 }
+
+function startsWithSlash (str) {
+	return str.charAt(0) === '/';
+}

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="app" ng-controller="AppController">
+<html data-ng-app="app" data-ng-controller="AppController">
   <head>
     <base href="/">
-    <title ng-bind="meta.title"></title>
+    <title data-ng-bind="meta.title"></title>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@">
@@ -18,56 +18,61 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
     <% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
-
+    <!--[if lt IE 9]>
+      <script src="vendor/html5shiv/dist/html5shiv.min.js"></script>
+    <![endif]-->
     <% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
-
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-      { "parsetags": "explicit" }
-    </script>
   </head>
   <body>
     <div class="container">
       <div class="navbar navbar-default">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
-            ng-click="menuCollapsed = ! menuCollapsed">
+          <button type="button" class="navbar-toggle" data-ng-init="menuCollapsed = true"
+            data-ng-click="menuCollapsed = ! menuCollapsed">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span> 
           </button>
           <div class="navbar-brand">
-            ngbp 
-            <small>
-              <a href="http://github.com/ngbp/ngbp/blob/v<%= version %>-release/CHANGELOG.md">
-                v<%= version %> 
-              </a>
-            </small>
+            WatchClub
           </div>
         </div>
         <div class="collapse navbar-collapse" collapse="menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ui-sref-active="active">
-              <a href ui-sref="home">
-                <i class="fa fa-home"></i>
-                Home
+            <li data-ui-sref-active="active">
+              <a href data-ui-sref="home" title="Home">
+                <i class="fa fa-clock-o"></i>
+                Watches 
               </a>
             </li>
-            <li ui-sref-active="active">
-              <a href="/test1" ui-sref="/test1">
-                <i class="fa fa-home"></i>
-                Test
+            <li data-ui-sref-active="active">
+              <a href="/about" data-ui-sref="/about" title="About">
+                <i class="fa fa-info"></i>
+                About us
               </a>
             </li>
-            <li ui-sref-active="active">
-              <a href="/test2" ui-sref="/test2">
-                <i class="fa fa-home"></i>
-                Test 2
+            <li data-ui-sref-active="active">
+              <a href="/blog" data-ui-sref="/blog" title="Watchblog">
+                <i class="fa fa-pencil"></i>
+                Watchblog
+              </a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a href="/features" data-ui-sref="/features" title="Features">
+                <i class="fa fa-rocket"></i>
+                Features
+              </a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a href="/search" data-ui-sref="/search" title="Search">
+                <i class="fa fa-search"></i>
+                Search
               </a>
             </li>
           </ul>
@@ -75,30 +80,32 @@
       </div>
     </div>
 
-    <div class="container" ui-view="main"></div>
+
+    <div class="container ui-view-container">
+      <div class="page" ui-view="main"></div>        
+    </div>
+  
 
     <footer class="footer">
       <div class="container">
         <div class="footer-inner">
-          <ul class="social">
-            <li><a target="_blank" href="http://gplus.to/joshdmiller"><i class="fa fa-google-plus-sign"></i></a></li>
-            <li><a target="_blank" href="http://twitter.com/joshdmiller"><i class="fa fa-twitter-sign"></i></a></li>
-            <li><a target="_blank" href="http://linkedin.com/in/joshdmiller"><i class="fa fa-linkedin-sign"></i></a></li>
-            <li><a target="_blank" href="http://github.com/ngbp/ngbp"><i class="fa fa-github-sign"></i></a></li>
-          </ul>
-          
-
           <p>
-            (c) 2013 <a href="http://www.joshdavidmiller.com">Josh David Miller</a>. 
-            <a href="http://github.com/ngbp/ngbp/fork_select">Fork this</a>
+            (c) 2015 <a href="http://www.johnhenry.net" title="JohnHenry.net">JohnHenry.net</a>. 
+            <a href="http://github.com/fabianweb/jh-boilerplate" title="jh-boilerplate on GitHub">Fork this</a>
             to kickstart your next project.
             <br />
-            ngbp is based on
-            <a href="http://www.angularjs.org">AngularJS</a>,
-            <a href="http://getbootstrap.com">Bootstrap</a>, 
-            <a href="http://angular-ui.github.com/bootstrap">UI Bootstrap</a>,
-            and 
-            <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>.        
+            Included by default is 
+            <a href="http://www.angularjs.org" title="AngularJS">AngularJS</a>,
+            <a href="https://docs.angularjs.org/api/ngResource" title="ngResource">ngResource</a>,
+            <a href="http://angular-ui.github.io/ui-router" title="UI Router">UI Router</a>, 
+            <a href="http://getbootstrap.com" title="Bootstrap">Bootstrap</a>, 
+            <a href="http://angular-ui.github.com/bootstrap" title="UI Bootstrap">UI Bootstrap</a>,
+            <a href="https://github.com/es-shims/es5-shim"  title="ES5 Shim">es5-shim &amp; es5-sham</a>,
+            <a href="https://github.com/afarkas/html5shiv"  title="HTML5 Shiv">html5shiv</a>,
+            <a href="https://docs.angularjs.org/api/ngAnimate" title="ngAnimate">ngAnimate</a>,
+            <a href="http://fortawesome.github.com/Font-Awesome" title="Font Awesome">Font Awesome</a>
+            and
+            <a href="https://github.com/daneden/animate.css" title="Animate.css">Animate.css</a>.
           </p>
         </div>
       </div>

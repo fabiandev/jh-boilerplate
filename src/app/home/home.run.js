@@ -5,10 +5,10 @@
 		.module( 'app.home' )
 		.run( run );
 
-	run.$inject = [ 'routerHelper' ];
+	run.$inject = [ 'stateManager' ];
 
-	function run( routerHelper ) {
-		//routerHelper.configureStates( getStates() );
+	function run( stateManager ) {
+		//stateManager.configureStates( getStates() );
 	}
 
 	function getStates() {

@@ -5,13 +5,13 @@
 		.module( 'app' )
 		.run( run );
 
-	run.$inject = [ '$rootScope', 'routerHelper' ];
+	run.$inject = [ '$rootScope', 'stateManager', '$log' ];
 
-	function run( $rootScope, routerHelper ) {
+	function run( $rootScope, stateManager, $log ) {
+		stateManager.addStates( __mainConfig.states );
+		stateManager.addErrorStates( __mainConfig.stateErrorTemplates );
 
-		routerHelper.addStates(__mainConfig.states);
-
-		routerHelper.setOtherwise(function($injector, $location) {
+		stateManager.setOtherwise(function($injector, $location) {
 			$rootScope.$broadcast('$stateNotFound', { to: $location.path() });
 		});
 
