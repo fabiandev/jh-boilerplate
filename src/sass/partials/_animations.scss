@@ -9,6 +9,7 @@
   -webkit-animation: $name #{$duration}s;
   -moz-animation: $name #{$duration}s;
   -o-animation: $name #{$duration}s;
+  -ms-animation: $name #{$duration}s;
   animation: $name #{$duration}s;
 }
 

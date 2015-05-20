@@ -22,13 +22,11 @@
 
     <% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
-
+    <!--[if lt IE 9]>
+      <script src="vendor/html5shiv/dist/html5shiv.min.js"></script>
+    <![endif]-->
     <% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
-
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-      { "parsetags": "explicit" }
-    </script>
   </head>
   <body>
     <div class="container">
@@ -103,6 +101,7 @@
             <a href="http://getbootstrap.com" title="Bootstrap">Bootstrap</a>, 
             <a href="http://angular-ui.github.com/bootstrap" title="UI Bootstrap">UI Bootstrap</a>,
             <a href="https://github.com/es-shims/es5-shim"  title="ES5 Shim">es5-shim &amp; es5-sham</a>,
+            <a href="https://github.com/afarkas/html5shiv"  title="HTML5 Shiv">html5shiv</a>,
             <a href="https://docs.angularjs.org/api/ngAnimate" title="ngAnimate">ngAnimate</a>,
             <a href="http://fortawesome.github.com/Font-Awesome" title="Font Awesome">Font Awesome</a>
             and

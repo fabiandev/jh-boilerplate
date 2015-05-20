@@ -140,7 +140,7 @@ module.exports = function ( grunt ) {
       build_vendorjs: {
         files: [
           {
-            src: [ '<%= vendor_files.js %>' ],
+            src: [ '<%= vendor_files.js %>', '<%= vendor_files.js_originals %>' ],
             dest: '<%= build_dir %>/',
             cwd: '.',
             expand: true
@@ -166,7 +166,13 @@ module.exports = function ( grunt ) {
             expand: true
           },
           {
-            src: [ '<%= vendor_files.css %>' ],
+            src: [ '<%= vendor_files.css_originals %>' ],
+            dest: '<%= compile_dir %>/',
+            cwd: '.',
+            expand: true
+          },
+          {
+            src: [ '<%= vendor_files.js_originals %>' ],
             dest: '<%= compile_dir %>/',
             cwd: '.',
             expand: true
@@ -267,7 +273,8 @@ module.exports = function ( grunt ) {
     cssmin: {
       options: {
         shorthandCompacting: false,
-        roundingPrecision: -1
+        roundingPrecision: -1,
+        keepSpecialComments: 0
       },
       target: {
         files: {
@@ -434,7 +441,8 @@ module.exports = function ( grunt ) {
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/style.css'
+          '<%= build_dir %>/assets/style.less.css',
+          '<%= build_dir %>/assets/style.sass.css'
         ]
       },
 
@@ -727,7 +735,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', function() {
     var tasks = [ 'clean', 'html2js', 'jshint', 'sass:build', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build' ];
 
     if ( grunt.option('with-tests') ) {
@@ -743,7 +751,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'sass:compile', 'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'cssmin',
+    'concat:build_css', 'sass:compile', 'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'cssmin',
     'index:compile'
   ]);
 
