@@ -35,9 +35,11 @@ __mainConfig.states = [
 			{
 				state: 'test',
 				config: {
-					url: '^/{someId:[0-9]{1,8}}',
+					url: '/{someId:[0-9]{1,8}}',
 					views: {
-						"test": {
+						// absolute views like view@state.substate
+						// main is in the unnamed root state, so it's 
+						"main@": {
 							controller: 'PageController',
 							templateUrl: 'home/templates/home.test.tpl.html'
 						}
@@ -53,7 +55,9 @@ __mainConfig.states = [
 			{
 				state: 'anotherTest',
 				config: {
-					url: '/bla',
+					// child state's urls get appended by default
+					// use ^ to define an absolute path
+					url: '^/bla',
 					views: {
 						"test": {
 							controller: 'PageController',

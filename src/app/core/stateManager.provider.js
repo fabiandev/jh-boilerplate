@@ -39,6 +39,7 @@
 				addStates: addStates,
 				addState: addState,
 				addErrorStates: addErrorStates,
+				addStateForNode: addStateForNode,
 				addErrorStateForNode: addErrorStateForNode,
 				setOtherwise: setOtherwise,
 				getStates: getStates
@@ -82,6 +83,30 @@
 				}
 
 				addStates(errorStates);
+			}
+
+			function addStateForNode( state, node ) {
+
+				var templateId = node.meta.type.toLowerCase();
+				var template;
+
+				for (var i = 0; i < __mainConfig.stateTemplates.length; i++) {
+					if (__mainConfig.stateTemplates[i].type == templateId) {
+						template = clone(__mainConfig.stateTemplates[i].template);
+						break;
+					}
+				}
+
+				if (!template) {
+					return addErrorStateForNode(state, node);
+				}
+
+				
+				template.config.data = node;
+				template.config.url = state;
+				template.state = state;
+
+				addState(template);
 			}
 
 			function addErrorStateForNode( state, node, errorCode ) {

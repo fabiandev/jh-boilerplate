@@ -9,8 +9,6 @@
 
 	function AppController ( $scope, $state, $location, stateManager, willowNodeService, $browser, $log ) {
 
-		// TODO: show an error page if a template could not be found
-
 		$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 			if ( angular.isDefined( toState.data.meta ) ) {
 				$scope.meta = toState.data.meta;
@@ -35,7 +33,6 @@
 						$log.debug('node has been found, going to add a state for '+ state);
 						addStateForNode(state, data);
 					})
-					// TODO: redirects
 					.error(function( data, status, headers ) {
 						$log.debug('no node found for path '+ state);
 						addErrorStateForNode(state, data, status);
@@ -44,28 +41,7 @@
 		});
 
 		function addStateForNode( state, node ) {
-
-			var templateId = node.meta.type.toLowerCase();
-			var template;
-
-			for (var i = 0; i < __mainConfig.stateTemplates.length; i++) {
-				if (__mainConfig.stateTemplates[i].type == templateId) {
-					template = clone(__mainConfig.stateTemplates[i].template);
-					break;
-				}
-			}
-
-			if (!template) {
-				return stateManager.addErrorStateForNode(state, node, 404);
-			}
-
-			
-			template.config.data = node;
-			template.config.url = state;
-			template.state = state;
-
-			stateManager.addStates([template]);
-
+			stateManager.addStateForNode( state, node );
 			$state.go(state);
 		}
 
@@ -77,8 +53,8 @@
 		$scope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams) {
 			event.preventDefault();
 
-			if ( toState.to != 'error.500' ) {
-				$state.go( 'error.500' );
+			if ( toState.to != 'error' ) {
+				$state.go( 'error' );
 			}
 		});
 

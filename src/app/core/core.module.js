@@ -4,7 +4,10 @@
 	angular.module( 'app.core', [
 		'templates-app',
 		'templates-common',
-		'ui.router'
+		'ui.router',
+		'ui.bootstrap',
+		'ngResource',
+		'ngAnimate'
 	]);
 
 })();

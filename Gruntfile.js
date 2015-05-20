@@ -559,12 +559,12 @@ module.exports = function ( grunt ) {
        */
       less: {
         files: [ 'src/**/*.less' ],
-        tasks: [ 'less:build' ]
+        tasks: [ 'less:build', 'concat:build_css' ]
       },
 
       sass: {
         files: [ 'src/**/*.scss' ],
-        tasks: [ 'sass:build' ]
+        tasks: [ 'sass:build', 'concat:build_css' ]
       },
 
       /**
@@ -665,7 +665,7 @@ module.exports = function ( grunt ) {
 
       sass: {
         files: [ 'src/**/*.scss' ],
-        tasks: [ 'sass:build' ]
+        tasks: [ 'sass:build', 'concat:build_css' ]
       },
 
       jsunit: {

@@ -1,0 +1,25 @@
+/*
+ *
+ * You can reference any classes, ngAnimate will add
+ * and you can use any animation from Animate.css
+ *
+ */
+
+@mixin animation($name, $duration) {
+  -webkit-animation: $name #{$duration}s;
+  -moz-animation: $name #{$duration}s;
+  -o-animation: $name #{$duration}s;
+  animation: $name #{$duration}s;
+}
+
+.ui-view-container {
+  position: relative; }
+
+[ui-view="main"].ng-enter {
+  @include animation(zoomInDown, .8);
+}
+
+[ui-view="main"].ng-leave {
+  position: absolute;
+  @include animation(fadeOutDown, .4);
+}
