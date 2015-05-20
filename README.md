@@ -35,22 +35,22 @@ Now you should be able to view the cloned project in your browser on `http://loc
 
 ## Configuration
 
-## Structure
+## Learn
 
-## Libraries
+### Libraries
 
-## Angular
+### Angular
 
-### Style Guide
+#### Style Guide
 
-## CSS
+### CSS
 
-### LESS & SASS
+#### LESS & SASS
 
-### Animations
+#### Animations
 
-## Grunt
+### Grunt
 
-### Build vs. Compile
+#### Build vs. Compile
 
-## Testing
+### Testing
