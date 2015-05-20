@@ -11,7 +11,7 @@ This package is based on [ngbp](http://joshdmiller.github.com/ng-boilerplate).
 - [SASS](http://sass-lang.com/)
 - [grunt-cli](https://github.com/gruntjs/grunt-cli)
 - [bower](http://bower.io/)
-- [karma]http://karma-runner.github.io/)
+- [karma](http://karma-runner.github.io/)
 
 ## Quick Start
 
