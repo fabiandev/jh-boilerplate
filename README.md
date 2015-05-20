@@ -29,7 +29,7 @@ $ npm start
 
 Now you should be able to view the cloned project in your browser on `http://localhost:4567`
 
-# Documentation
+## Documentation
 
 ## Installation
 
