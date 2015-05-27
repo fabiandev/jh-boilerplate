@@ -111,6 +111,9 @@ jh-boilerplate/
   |  |  |- main.less
   |  |- sass
   |  |  |- main.scss
+  |  |- config.js
+  |  |- helpers.js
+  |  |- index.html
   |- vendor/
   |  |- <bower modules>
   |- .bowerrc
@@ -165,7 +168,7 @@ This package supports unit testing with [karma](http://karma-runner.github.io/) 
 
 ##### module.prefix / module.suffix
 
-Every module is wrapped within a self-executing function by default to prevent global namespace pollution.
+The entire application (without vendor) is wrapped within a self-executing function by default to prevent global namespace pollution.
 
 ##### package.json
 
@@ -185,7 +188,32 @@ This is just a simple file that enables you to use the alias ```npm start``` to 
 
 ### Configuration
 
+As mentioned before, ```build.config.js``` is the file, where your build configuration goes to.
+
+> Do *not* modify anything in app_files, as this is pre-configured for the application structure unless you really know what you do and you may also have to change parts of ```Gruntfile.js```.
+
+What you do need to modify regularly, is the ```vendor_files``` section:
+
+- In the ```js``` Array, you define the exact location of each vendor javascript file you want to use in your application.
+- The ```js_originals``` Array should be used for vendor files you want to include in your project, but should not be minified and combined with other files, so you can reference the file alone.
+- In ```css`` All vendor stylesheet file locations are defined. Note that you can't use SASS or Less here. Those must be included in your main pre-processor files and is covered later.
+- ```css_originals``` is the ```js_originals``` for CSS. Yup!
+- In ```assets``` you can define any file, which should be included in your build, and will be placed in a - guess what - an ```assets\``` directory.
+
 ### Libraries
+
+As you could spot in ```build.config.js```, there are several libraries included by default, you may exchange, remove or extend:
+
+- [Bootstrap](http://getbootstrap.com/): An awesome CSS Framework, which makes life so much easier.
+- [Font Awesome](http://fortawesome.github.io/Font-Awesome/): A well known icon font that's free to use. It's not included in ```build.config.js``` but loaded from a CDN and placed in ```src\index.html``` (covered later).
+- [AngularJS](https://www.angularjs.org/): Of course Angular is included, as our apps **are** Angular apps.
+- [UI Bootstrap](http://angular-ui.github.io/bootstrap/): A 3rd party Angular module, that includes all Bootstrap specific JavaScript without using jQuery, so you don't have to use it. Yay! (... and you should't use it with Angular - almost always)
+- [UI Router](http://angular-ui.github.io/ui-router/): A 3rd party Angular module to use instead of the default AngularJS router, which is based on states and supports nested views and routing.
+- [ngResource](https://docs.angularjs.org/api/ngResource): An Angular module to handle REST resources.
+- [ngAnimate](https://docs.angularjs.org/api/ngAnimate): An Angular Module, that adds a class to transitioning elements for you to add animations or other logic linked to those states.
+- [Animate.css](https://github.com/daneden/animate.css): A CSS animation library you can use with ngAnimate (covered later).
+- [ES5 Shim](https://github.com/es-shims/es5-shim): Tries to make non ES5 compatible Browser, ES5 compatible
+- [HTML5 Shiv](https://github.com/afarkas/html5shiv): Tries to introduce HTML5 elements to non-HTML5 Browser.
 
 ### Angular
 
