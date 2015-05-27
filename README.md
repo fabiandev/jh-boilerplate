@@ -370,7 +370,7 @@ If you take a look at ```sass\partials\_animations.scss``` you can see an exampl
 
 Please take a look at the [ngAnimate documentation](https://code.angularjs.org/1.3.15/docs/api/ngAnimate) for it's behavior and the [Animate.css documentation](https://github.com/daneden/animate.css) for available animations.
 
-### Grunt
+#### Grunt
 
 We covered a lot, but now we want to see something in the browser. Alright, make sure you're in the ```jh-boilerplate``` directory and type the following command:
 
@@ -425,7 +425,7 @@ $ grunt bump:major
 >> Version bumped to 1.0.0
 ```
 
-### Testing
+#### Testing
 
 You may include karma unit test files. E.g. Those files are named like ```name.spec.js```
 
