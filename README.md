@@ -412,17 +412,18 @@ You may also simply type ```grunt```, an alias for the extremely long command ``
 
 When compiling, your application version is increased, so if it was ```0.0.4``` it will then be ```0.0.5```. You could also increase the version manually by typing ```grunt bump```.
 
-If you whish to increase the minor or major version number, do it like this:
+If you whish to increase the minor or major version number, do it like this, assuming the current version is ```0.0.4```:
 
 ```sh
+$ grunt bump
+>> Version bumped to 0.0.5
+
 $ grunt bump:minor
-```
-results in: 0.0.4 -> 0.1.0
+>> Version bumped to 0.1.0
 
-```sh
 $ grunt bump:major
+>> Version bumped to 1.0.0
 ```
-results in: 0.0.4 -> 1.0.0
 
 ### Testing
 
