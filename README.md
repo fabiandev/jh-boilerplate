@@ -198,7 +198,7 @@ What you do need to modify regularly, is the ```vendor_files``` section:
 - The ```js_originals``` Array should be used for vendor files you want to include in your project, but should not be minified and combined with other files, so you can reference the file alone.
 - In ```css`` All vendor stylesheet file locations are defined. Note that you can't use SASS or Less here. Those must be included in your main pre-processor files and is covered later.
 - ```css_originals``` is the ```js_originals``` for CSS. Yup!
-- In ```assets``` you can define any file, which should be included in your build, and will be placed in a - guess what - an ```assets\``` directory.
+- In ```assets``` you can define any file, which should be included in your build, and will be placed in the - guess what - ```assets\``` directory.
 
 ### Libraries
 
@@ -215,7 +215,27 @@ As you could spot in ```build.config.js```, there are several libraries included
 - [ES5 Shim](https://github.com/es-shims/es5-shim): Tries to make non ES5 compatible Browser, ES5 compatible
 - [HTML5 Shiv](https://github.com/afarkas/html5shiv): Tries to introduce HTML5 elements to non-HTML5 Browser.
 
-### Angular
+### The App
+
+As mentioned before, your application code lives in ```src\```:
+
+- The index.html file template is located in ```src\index.html```
+- Routes and default values are places in ```src\config.js```
+- Global helper function, that may be used *anywhere* should be placed in ```src\helpers.js```
+
+#### Angular
+
+You should be familiar with at least the basics of Angular and understand it's modular structure. This boilerplate makes heavy use of it, and was built with the intention of creating a small module for every application part or logic.
+
+> The app structure was primarily influenced by this [opinionated styleguide](https://github.com/johnpapa/angular-styleguide). You should take a look at it, however, I did not apply every pattern. E.g. we will use ```$scope``` instead of ```this```.
+
+#### Introduction
+
+All reusable modules you write, should be placed in ```src\common```. Those modules should be compatible with **any** project, and should not contain any application specific logic. An example would be a module that can connect to the twitter API and return data.
+
+The application modules will be saved in ```src\app```.
+
+#### 
 
 #### Style Guide
 
