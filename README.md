@@ -24,7 +24,7 @@ $ sudo npm -g install grunt-cli karma bower
 $ npm install
 $ bower install
 $ grunt build
-$ npm start
+$ node server.js
 ```
 
 Now you should be able to view the cloned project in your browser on `http://localhost:4567`
@@ -152,7 +152,7 @@ This file simply configures the folder, where to place bower modules (in our cas
 All bower modules that have been installed, should be present in the ```devDependencies``` section, with their version.
 To do this automatically when installing a module via the command line, use ```bower install <module-name> --save-dev```
 
-> Note that you should not define an explicit version like ```1.3.5```, but define it with a tilde ```~1.3.5```. This will match the latest minor version ```1.3.x```. When using a caret ```^1.3.5``` the latest major version will be used: ```1.x.x```.
+> Note that you should not define an explicit version like ```1.3.5```, but define it with a tilde ```~1.3.5```. This will match ```1.3.x```. When using a caret ```^1.3.5``` the the following rule applies: ```1.x.x```.
 
 ##### build.config.json
 
@@ -360,16 +360,79 @@ The server would respond if it could find a Node for that URL and the type of th
 
 Those "generic" templates and controllers live in their own module name... "generic".
 
-#### Style Guide
-
-### CSS
-
 #### LESS & SASS
+
+Your main SASS and Less files are located at ```src\sass\main.scss``` and ```src\less\main.less```. Those files must exists and are compiled. You may include any other pre-processor file.
 
 #### Animations
 
+If you take a look at ```sass\partials\_animations.scss``` you can see an example usage of ngAnimate with Animate.css.
+
+Please take a look at the [ngAnimate documentation](https://code.angularjs.org/1.3.15/docs/api/ngAnimate) for it's behavior and the [Animate.css documentation](https://github.com/daneden/animate.css) for available animations.
+
 ### Grunt
+
+We covered a lot, but now we want to see something in the browser. Alright, make sure you're in the ```jh-boilerplate``` directory and type the following command:
+
+```sh
+$ grunt watch
+```
+
+This will create a folder ```\build``` and watches your files, so if you make any changes, it will automatically rebuild.
+
+Now open a new command line window, change to the jh-boilerplate directory and type:
+
+```sh
+$ node server.js
+```
+
+This starts the test server and you should now be able to view the boilerplate in your browser at ```http://localhost:4567```.
+
+> JH Boilerplate supports live reload! So grab the [Chrome Extension](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei) and you don't need to manually reload any more.
+
+If anything is not showing up as expected, it may help to stop watching with ```Ctrl+C``` and run ```grunt watch``` again.
 
 #### Build vs. Compile
 
+We already know how to watch files, but you can simply rebuild without watching with this command:
+
+```sh
+$ grunt build
+```
+
+If you build, nothing gets minified or combined, so it's easy to debug. For production you should compile your application, to create a single JavaScript and CSS file:
+
+```sh
+$ grunt compile
+```
+
+You may also simply type ```grunt```, an alias for the extremely long command ```grunt compile```.
+
+> The compiled version of your application is placed in a newly created ```\bin``` directory. To test it with our small server you can do so by starting it with ```node server.js --dir bin```.
+
+When compiling, your application version is increased, so if it was ```0.0.4``` it will then be ```0.0.5```. You could also increase the version manually by typing ```grunt bump```.
+
+If you whish to increase the minor or major version number, do it like this:
+
+```sh
+$ grunt bump:minor
+```
+results in: 0.0.4 -> 0.1.0
+
+```sh
+$ grunt bump:major
+```
+results in: 0.0.4 -> 1.0.0
+
 ### Testing
+
+You may include karma unit test files. E.g. Those files are named like ```name.spec.js```
+
+You can then optionally run unit test:
+
+```sh
+$ grunt watch --with-tests
+$ grunt build --with-tests
+$ grunt compile --with-tests
+```
+
