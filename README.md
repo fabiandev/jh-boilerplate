@@ -223,6 +223,8 @@ As mentioned before, your application code lives in ```src\```:
 - Routes and default values are places in ```src\config.js```
 - Global helper function, that may be used *anywhere* should be placed in ```src\helpers.js```
 
+For now, just visit ```src\config.js``` and edit the ```__mainConfig.config``` for something that suits you.
+
 #### Angular
 
 You should be familiar with at least the basics of Angular and understand it's modular structure. This boilerplate makes heavy use of it, and was built with the intention of creating a small module for every application part or logic.
@@ -235,7 +237,128 @@ All reusable modules you write, should be placed in ```src\common```. Those modu
 
 The application modules will be saved in ```src\app```.
 
-#### 
+#### Modules
+
+An module should always consist of the following files, where "name" should be replaced with the module name:
+
+- ```name.module.js```: This file declares the module, and all it's dependency modules.
+
+```js
+(function() {
+	'use strict';
+
+	angular.module( 'name', [
+		'dependency1',
+		'dependency2'
+	]);
+
+})();
+```
+
+- ```name.config.js```: Before the application starts, you can configure various things like providers in this file.
+
+```js
+(function() {
+	'use strict';
+
+	angular.module( 'name' )
+		.config( config );
+
+	config.$inject = [ 'someServiceProvider' ];
+
+	function config ( someServiceProvider ) {
+
+	}
+
+})();
+```
+
+> Note that providers have to be suffixed with "Provider" in the configuration phase. So if your Provider is called ```someService```, you would inject it with ```someServiceProvider```.
+> **This is exclusively true for Providers and the configuration phase.**
+
+- ```name.run.js```: After the configuration phase, the "run" parts of your application will be triggered.
+
+```js
+(function() {
+	'use strict';
+
+	angular
+		.module( 'app' )
+		.run( run );
+
+	run.$inject = [ 'someService' ];
+
+	function run( someService ) {
+
+	}
+
+})();
+```
+
+> Note that you are now injecting the ```someService``` Provider without the "Provider" suffix.
+
+##### Optional Module Files
+
+- ```name.controller.js```: If the module needs a controller, create a file for that!
+
+```js
+(function() {
+	'use strict';
+
+	angular.module( 'name' )
+		.controller( 'NameController', AppController );
+
+
+	AppController.$inject = [ '$scope', '$state', '$location' ];
+
+	function AppController ( $scope, $state, $location ) {
+
+	}
+
+})();
+```
+
+- ```some.factory.js```: For every factory, create a new file. "some" should be replaced with an exprissive description what it does.
+- ```some.provider.js```: For every provider, create a new file.
+- ```some.service.js```: For every service, create a new file.
+
+> If a module has (a) submodule(s), create (a) folder(s) for that, and define it as a dependency in the parent ```name.module.js``` file.
+
+##### The App Module
+
+The application ```src\app``` itself is a module, that defines sub-modules as dependency in ```app.module.js```. Those submodules may again have submodules and so on...
+
+#### Templates
+
+If a module has templates, create a folder ```templates``` and name them like ```some-template.tpl.html```.
+
+#### The Router
+
+You already glanced at ```src\config.js``` and set some basic configuration.
+
+At this stage, I want to refer to the [UI Router wiki](https://github.com/angular-ui/ui-router/wiki) which covers all possibilities of the package.
+
+Assuming you are now familiar with UI Router states, substates views and subviews you know, that you create href's like this:
+
+```html
+<a data-ui-sref="home" title="Home">
+  Home
+</a>
+```
+
+> Note that you should use the ```data-``` prefix on **any** Angular directive, to produce valid HTML5 documents.
+
+As we're using JH Boilerplate with our CMS, we want to ask, if not defined states, are defined there. In that case, you would add a href *and* the ui-sref with the exact same value:
+
+```html
+<a href="/some/link" data-ui-sref="/some/link" title="Go to Some Link">
+  Just a test link
+</a>
+```
+
+The server would respond if it could find a Node for that URL and the type of the Node, so for every type it could returned there must be a template set in ```src\config.js``` within ```__mainConfig.stateTemplates```.
+
+Those "generic" templates and controllers live in their own module name... "generic".
 
 #### Style Guide
 
