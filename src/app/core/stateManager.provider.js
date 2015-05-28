@@ -140,7 +140,7 @@
 					errorTemplate.config.url = state;
 				}
 
-				stateManager.addState(errorTemplate);
+				addState(errorTemplate);
 			}
 
 			function findAllStatesWithNested( states, statesCollection ) {
