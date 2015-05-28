@@ -62,19 +62,28 @@ app.use(function(req, res, next) {
 
 
 app.get('/api/generic', function (res, res, next) {
+  
+  // error response
+  res.status(404);
+
   res.json({
+    meta: {},
+    data: {}
+  });
+
+  // response for node has been found
+  /*res.json({
     meta: {
       type: 'page',
       title: 'Custom Page Title',
       description: 'This is the page description'
     },
     data: {
-      'one': 1,
-      'two': 'bla',
+      'some': 1,
+      'custom': 'data',
       'three': true
     }
-  });
-
+  });*/
 });
 
 
